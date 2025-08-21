@@ -1,0 +1,270 @@
+---SELECT *
+---FROM orders
+---;
+
+
+
+/**
+------ Pulls the first 5 rows and all columns from the orders table that have a
+--- dollar amount of gloss_amt_usd greater than or equal to 1000.
+
+SELECT *
+FROM orders
+WHERE gloss_amt_usd >= 1000
+;
+**/
+/**
+---Pulls the first 10 rows and all columns from the orders
+---table that have a total_amt_usd less than 500
+**
+SELECT *
+FROM orders
+WHERE total_amt_usd < 500
+LIMIT 10
+;
+*/
+/**
+Filter the accounts table to include the company name, website,
+and the primary point of contact (primary_poc)
+just for the Exxon Mobil company in the accounts table.
+**
+*
+SELECT name,  website, primary_poc
+FROM accounts
+WHERE name = 'Exxon Mobil';
+*/
+/*
+Create a column that divides the standard_amt_usd by the standard_qty to
+find the unit price for standard paper for each order. Limit the results to
+the first 10 orders, and include the id and account_id fields.
+*
+SELECT * ,standard_amt_usd / NULLIF(standard_qty, 0) as u_mom
+FROM orders
+LIMIT 10
+;
+*/
+/*
+Write a query that finds the percentage of revenue that comes from poster paper for each order. You will need to use only the columns that end with _usd. (Try to do this without using the total column.) Display the id and account_id fields also. NOTE - you will receive an error with the correct solution to this question. This occurs because at least one of the values in the data creates a division by zero in your formula. You will learn later in the course how to fully handle this issue. For now, you can just limit your calculations to the first 10 orders, as we did in question #1, and you'll avoid that set of data that causes the problem.
+*
+SELECT * ,standard_amt_usd + gloss_amt_usd + poster_amt_usd  as u_mom
+FROM orders
+LIMIT 10
+;
+
+*/
+/*
+LIKE QUIZ
+ *1
+SELECT *
+FROM accounts
+WHERE name LIKE 'C%'
+LIMIT 10
+
+;
+*2
+SELECT *
+FROM accounts
+WHERE name LIKE '%one%'
+LIMIT 10
+;
+*3
+SELECT *
+FROM accounts
+WHERE name LIKE '%s'
+LIMIT 10
+;
+*/
+/* IN QUIZ
+*1
+SELECT name, primary_poc, sales_rep_id
+FROM accounts
+WHERE name IN ('Walmart', 'Target', 'Nordstrom')
+;
+*2
+SELECT *
+FROM web_events
+WHERE channel IN ('organic', 'adwords')
+;
+*
+
+\echo  'QUIZ  NOT';
+
+\echo  'NUM: 1';
+SELECT name, primary_poc, sales_rep_id
+FROM accounts
+WHERE name NOT IN ('Walmart', 'Target', 'Nordstrom')
+;
+\echo  'NUM: 2';
+SELECT *
+FROM web_events
+WHERE channel NOT  IN ('organic', 'adwords')
+;
+\echo  'NUM: 3';
+SELECT *
+FROM accounts
+WHERE name NOT LIKE 'C%'
+LIMIT 10
+;
+\echo  'NUM: 4';
+SELECT *
+FROM accounts
+WHERE name NOT LIKE '%one%'
+LIMIT 10
+;
+\echo  'NUM: 5';
+SELECT *
+FROM accounts
+WHERE name NOT LIKE '%s'
+LIMIT 10
+;
+*
+
+
+\echo  'QUIZ : AND BETWEAN'
+\echo  '1 -> : ';
+SELECT *
+FROM orders
+WHERE standard_qty < 1000 AND poster_qty = 0 AND gloss_qty = 0
+;
+*/
+
+/* joun quiz question part 1
+*
+SELECT  
+    accounts.name AS account_name,  -- Optional for verification
+    accounts.primary_poc, 
+    web_events.occurred_at AS event_time, 
+    web_events.channel
+FROM web_events
+JOIN accounts 
+    ON web_events.account_id = accounts.id
+WHERE accounts.name = 'Walmart';
+
+*/
+/*q2
+SELECT  
+region.name as region_name,
+sales_reps.name AS sales_name,
+accounts.name AS account_name
+FROM sales_reps
+JOIN accounts
+    ON sales_reps.id = accounts.sales_rep_id
+JOIN region
+    ON sales_reps.region_id = region.id
+ORDER BY account_name;
+*/
+/*q3
+*/
+/*
+SELECT
+region.name AS region_name,
+accounts.name AS account_name,
+orders.total_amt_usd / NULLIF(orders.total, 0)  AS unit_price 
+FROM accounts
+JOIN orders
+    ON orders.account_id = accounts.id
+JOIN sales_reps
+    ON sales_reps.id = accounts.sales_rep_id
+JOIN region
+    ON sales_reps.region_id = region.id
+LIMIT 10;
+*/
+
+
+-- -- Quiz Quiz: Last Check
+-- SELECT region.name AS RegionName,sales_reps.name AS SalesRepName ,accounts.name AS AccountsName
+-- FROM accounts
+-- JOIN sales_reps
+-- ON accounts.sales_rep_id = sales_reps.id  
+-- JOIN region
+-- ON region.id = sales_reps.region_id
+-- WHERE region.name LIKE '%Midwest%'
+-- ORDER BY accounts.name
+-- ;
+--
+
+
+--
+-- -- Quiz Quiz: Last Check
+-- SELECT region.name AS RegionName,sales_reps.name AS SalesRepName ,accounts.name AS AccountsName
+-- FROM accounts
+-- JOIN sales_reps
+-- ON accounts.sales_rep_id = sales_reps.id
+-- JOIN region
+-- ON region.id = sales_reps.region_id
+-- WHERE region.name LIKE '%Midwest%'AND sales_reps.name LIKE 'S%'
+-- ORDER BY accounts.name
+-- ;
+--
+
+--
+-- -- Quiz Quiz: Last Check
+-- SELECT region.name AS "RegionName",sales_reps.name AS "SalesRepName" ,accounts.name AS "AccountsName"
+-- FROM accounts
+-- JOIN sales_reps
+-- ON accounts.sales_rep_id = sales_reps.id
+-- JOIN region
+-- ON region.id = sales_reps.region_id
+-- WHERE region.name LIKE '%Midwest%'AND sales_reps.name LIKE 'S%'
+-- ORDER BY accounts.name
+-- ;
+--
+
+-- -- Quiz Quiz: Last Check
+-- SELECT region.name AS "RegionName",sales_reps.name AS "SalesRepName" ,accounts.name AS "AccountsName"
+-- FROM accounts
+-- JOIN sales_reps
+-- ON accounts.sales_rep_id = sales_reps.id
+-- JOIN region
+-- ON region.id = sales_reps.region_id
+-- WHERE region.name LIKE '%Midwest%'AND sales_reps.name LIKE 'K%'
+-- ORDER BY accounts.name
+-- ;
+--
+
+-- -- Quiz Quiz: Last Check 4
+-- SELECT region.name AS "RegionName", accounts.name AS "AccountsName",total_amt_usd  / NULLIF(total, 0) AS "unit price"
+-- FROM accounts
+-- JOIN sales_reps
+-- ON accounts.sales_rep_id = sales_reps.id
+-- JOIN region
+-- ON region.id = sales_reps.region_id
+-- JOIN orders
+-- ON accounts.id = orders.account_id
+-- WHERE standard_qty > 100
+-- ;
+--
+
+
+
+-- -- Quiz Quiz: Last Check 5
+-- SELECT region.name AS "RegionName", accounts.name AS "AccountsName",total_amt_usd  / NULLIF(total, 0) AS "unit price"
+-- FROM accounts
+-- JOIN sales_reps
+-- ON accounts.sales_rep_id = sales_reps.id
+-- JOIN region
+-- ON region.id = sales_reps.region_id
+-- JOIN orders
+-- ON accounts.id = orders.account_id
+-- WHERE standard_qty > 100 AND poster_qty > 50
+-- ;
+--
+--
+
+
+-- Quiz Quiz: Last Check 5
+SELECT region.name AS "RegionName", accounts.name AS "AccountsName",total_amt_usd  / NULLIF(total, 0) AS "unit price"
+FROM accounts
+JOIN sales_reps
+ON accounts.sales_rep_id = sales_reps.id
+JOIN region
+ON region.id = sales_reps.region_id
+JOIN orders
+ON accounts.id = orders.account_id
+WHERE standard_qty > 100 AND poster_qty > 50
+ORDER BY "unit price" DESC
+;
+
+
+
+
