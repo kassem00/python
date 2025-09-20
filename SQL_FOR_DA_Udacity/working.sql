@@ -327,10 +327,3 @@ WHERE standard_qty > 100 AND poster_qty > 50
 ORDER BY "unit price" DESC
 ;
 
-
-{
-
-rnhkhdfdshfsfhskf
-sdfkmlsfmls
-
-}
